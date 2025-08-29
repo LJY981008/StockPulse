@@ -24,7 +24,7 @@ class CompanyRepository(
     }
 
     override fun findByIsActive(isActive: Boolean): List<Company> {
-        return companyJpaRepository.findByIsActive(isActive)
+        return companyJpaRepository.findByActive(isActive)
             .map { it.toCompany() }
     }
 
