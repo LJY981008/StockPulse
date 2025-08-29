@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: stockpulse-postgres-dev
+    env_file:
+      - ../properties.env
+    environment:
+      POSTGRES_DB: ${DB_SCHEME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "5433:5432"  # 기본 PostgreSQL 포트와 충돌 방지
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ../src/main/resources:/docker-entrypoint-initdb.d:ro
+    networks:
+      - stockpulse-dev-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_SCHEME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: >
+      postgres
+      -c log_statement=all
+      -c log_destination=stderr
+      -c logging_collector=off
+      -c max_connections=200
+      -c shared_buffers=256MB
+      -c effective_cache_size=1GB
+
+  # pgAdmin (선택사항 - 데이터베이스 관리 도구)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: stockpulse-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@stockpulse.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - stockpulse-dev-network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres_dev_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  stockpulse-dev-network:
+    driver: bridge
