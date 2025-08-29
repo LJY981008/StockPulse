@@ -8,7 +8,7 @@ interface CompanyJpaRepository : JpaRepository<JpaCompany, UUID> {
 
     fun findByStockCode(stockCode: String): JpaCompany?
 
-    fun findByIsActive(isActive: Boolean): List<JpaCompany>
+    fun findByActive(isActive: Boolean): List<JpaCompany>
 
     @Query("SELECT c FROM JpaCompany c WHERE c.isActive = true ORDER BY c.companyName")
     fun findActiveCompaniesOrderByName(): List<JpaCompany>
