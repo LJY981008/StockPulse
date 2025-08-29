@@ -13,7 +13,7 @@ class NewsArticle(
     val title: String,
     val content: String?,
     val publishedAt: LocalDateTime,
-    val collectedAt: LocalDateTime
+    val collectedAt: LocalDateTime,
 ) {
     // 비지니스 로직
 }

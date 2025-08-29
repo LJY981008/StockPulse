@@ -8,9 +8,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class DataSourceRepository(
-    private val dataSourceJpaRepository: DataSourceJpaRepository
+    private val dataSourceJpaRepository: DataSourceJpaRepository,
 ) : DataSourceRepositoryPort {
-
     // Read operations
     override fun findById(sourceId: Int): DataSource? {
         return dataSourceJpaRepository.findById(sourceId)
@@ -30,7 +29,7 @@ class DataSourceRepository(
     override fun existsBySourceName(sourceName: String): Boolean {
         return dataSourceJpaRepository.existsBySourceName(sourceName)
     }
-    
+
     override fun existsById(sourceId: Int): Boolean {
         return dataSourceJpaRepository.existsById(sourceId)
     }
@@ -40,21 +39,21 @@ class DataSourceRepository(
         val savedJpaDataSource = dataSourceJpaRepository.save(dataSource.toJpaDataSource())
         return savedJpaDataSource.toDataSource()
     }
-    
+
     override fun saveAll(dataSources: List<DataSource>): List<DataSource> {
         val jpaDataSources = dataSources.map { it.toJpaDataSource() }
         return dataSourceJpaRepository.saveAll(jpaDataSources)
             .map { it.toDataSource() }
     }
-    
+
     override fun deleteById(sourceId: Int) {
         dataSourceJpaRepository.deleteById(sourceId)
     }
-    
+
     override fun delete(dataSource: DataSource) {
         dataSourceJpaRepository.delete(dataSource.toJpaDataSource())
     }
-    
+
     override fun count(): Long {
         return dataSourceJpaRepository.count()
     }

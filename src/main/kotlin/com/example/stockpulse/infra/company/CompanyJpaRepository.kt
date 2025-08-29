@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query
 import java.util.UUID
 
 interface CompanyJpaRepository : JpaRepository<JpaCompany, UUID> {
-
     fun findByStockCode(stockCode: String): JpaCompany?
 
     fun findByActive(isActive: Boolean): List<JpaCompany>

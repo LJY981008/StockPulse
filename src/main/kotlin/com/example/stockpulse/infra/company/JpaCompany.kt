@@ -17,23 +17,17 @@ data class JpaCompany(
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "company_id", columnDefinition = "uuid")
     val companyId: UUID,
-
     @Column(name = "stock_code", unique = true, nullable = false, length = 10)
     val stockCode: String,
-
     @Column(name = "company_name", nullable = false, length = 100)
     val companyName: String,
-
     @Column(name = "search_keyword", nullable = false)
     val searchKeyword: String,
-
     @Column(name = "is_active", nullable = false)
     val isActive: Boolean = true,
-
     @Column(name = "created_at", nullable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
-
     companion object {
         fun JpaCompany.toCompany(): Company {
             return Company(
@@ -42,10 +36,10 @@ data class JpaCompany(
                 companyName = this.companyName,
                 searchKeyword = this.searchKeyword,
                 isActive = this.isActive,
-                createdAt = this.createdAt
+                createdAt = this.createdAt,
             )
         }
-        
+
         fun Company.toJpaCompany(): JpaCompany {
             return JpaCompany(
                 companyId = this.companyId,
@@ -53,7 +47,7 @@ data class JpaCompany(
                 companyName = this.companyName,
                 searchKeyword = this.searchKeyword,
                 isActive = this.isActive,
-                createdAt = this.createdAt
+                createdAt = this.createdAt,
             )
         }
     }

@@ -9,9 +9,8 @@ import java.util.UUID
 
 @Repository
 class CompanyRepository(
-    private val companyJpaRepository: CompanyJpaRepository
+    private val companyJpaRepository: CompanyJpaRepository,
 ) : CompanyRepositoryPort {
-
     // Read operations
     override fun findById(companyId: UUID): Company? {
         return companyJpaRepository.findById(companyId)
@@ -32,7 +31,7 @@ class CompanyRepository(
         return companyJpaRepository.findActiveCompaniesOrderByName()
             .map { it.toCompany() }
     }
-    
+
     override fun findAll(): List<Company> {
         return companyJpaRepository.findAll()
             .map { it.toCompany() }
@@ -42,7 +41,7 @@ class CompanyRepository(
     override fun existsByStockCode(stockCode: String): Boolean {
         return companyJpaRepository.existsByStockCode(stockCode)
     }
-    
+
     override fun existsById(companyId: UUID): Boolean {
         return companyJpaRepository.existsById(companyId)
     }
@@ -52,21 +51,21 @@ class CompanyRepository(
         val savedJpaCompany = companyJpaRepository.save(company.toJpaCompany())
         return savedJpaCompany.toCompany()
     }
-    
+
     override fun saveAll(companies: List<Company>): List<Company> {
         val jpaCompanies = companies.map { it.toJpaCompany() }
         return companyJpaRepository.saveAll(jpaCompanies)
             .map { it.toCompany() }
     }
-    
+
     override fun deleteById(companyId: UUID) {
         companyJpaRepository.deleteById(companyId)
     }
-    
+
     override fun delete(company: Company) {
         companyJpaRepository.delete(company.toJpaCompany())
     }
-    
+
     override fun count(): Long {
         return companyJpaRepository.count()
     }

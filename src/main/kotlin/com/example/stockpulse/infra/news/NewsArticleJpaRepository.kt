@@ -11,30 +11,42 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 interface NewsArticleJpaRepository : JpaRepository<JpaNewsArticle, UUID> {
-    
-    fun findByJpaCompanyOrderByPublishedAtDesc(jpaCompany: JpaCompany, pageable: Pageable): Page<JpaNewsArticle>
-    
-    fun findByJpaDataSourceOrderByPublishedAtDesc(jpaDataSource: JpaDataSource, pageable: Pageable): Page<JpaNewsArticle>
-    
+    fun findByJpaCompanyOrderByPublishedAtDesc(
+        jpaCompany: JpaCompany,
+        pageable: Pageable,
+    ): Page<JpaNewsArticle>
+
+    fun findByJpaDataSourceOrderByPublishedAtDesc(
+        jpaDataSource: JpaDataSource,
+        pageable: Pageable,
+    ): Page<JpaNewsArticle>
+
     @Query("SELECT n FROM JpaNewsArticle n WHERE n.publishedAt BETWEEN :startDate AND :endDate ORDER BY n.publishedAt DESC")
     fun findByPublishedAtBetweenOrderByPublishedAtDesc(
         @Param("startDate") startDate: LocalDateTime,
         @Param("endDate") endDate: LocalDateTime,
-        pageable: Pageable
+        pageable: Pageable,
     ): Page<JpaNewsArticle>
-    
-    @Query("SELECT n FROM JpaNewsArticle n WHERE n.jpaCompany = :company AND n.publishedAt BETWEEN :startDate AND :endDate ORDER BY n.publishedAt DESC")
+
+    @Query(
+        """SELECT n FROM JpaNewsArticle n 
+           WHERE n.jpaCompany = :company 
+           AND n.publishedAt BETWEEN :startDate AND :endDate 
+           ORDER BY n.publishedAt DESC""",
+    )
     fun findByJpaCompanyAndPublishedAtBetweenOrderByPublishedAtDesc(
         @Param("company") jpaCompany: JpaCompany,
         @Param("startDate") startDate: LocalDateTime,
         @Param("endDate") endDate: LocalDateTime,
-        pageable: Pageable
+        pageable: Pageable,
     ): Page<JpaNewsArticle>
-    
+
     fun existsByOriginalUrl(originalUrl: String): Boolean
-    
+
     fun findByOriginalUrl(originalUrl: String): JpaNewsArticle?
-    
+
     @Query("SELECT COUNT(n) FROM JpaNewsArticle n WHERE n.jpaCompany = :company")
-    fun countByJpaCompany(@Param("company") jpaCompany: JpaCompany): Long
+    fun countByJpaCompany(
+        @Param("company") jpaCompany: JpaCompany,
+    ): Long
 }
